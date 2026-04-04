@@ -1,3 +1,4 @@
+/** @jest-environment node */
 import { apiOk, apiError } from '@/lib/api'
 
 describe('apiOk', () => {
