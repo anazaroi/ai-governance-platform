@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum ModelType {
+  LLM
+  ML
+  RPA
+  RULES
+}
+
+enum ModelStatus {
+  DRAFT
+  ACTIVE
+  RETIRED
+}
+
+enum RiskTier {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum WorkflowType {
+  ONBOARDING
+  MATERIAL_CHANGE
+  PERIODIC_REVIEW
+  RETIREMENT
+}
+
+enum WorkflowStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum VendorType {
+  INTERNAL
+  THIRD_PARTY
+}
+
+enum ControlEvidenceStatus {
+  PENDING
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum UserRole {
+  EXECUTIVE
+  MODEL_RISK_ANALYST
+  APPROVER
+  COMPLIANCE_OFFICER
+  ADMIN
+}
+
+model OrgUser {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String
+  name      String?
+  role      UserRole @default(MODEL_RISK_ANALYST)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UseCase {
+  id                 String    @id @default(cuid())
+  name               String
+  description        String?
+  regulatoryCategory String
+  models             AIModel[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Vendor {
+  id                 String     @id @default(cuid())
+  name               String
+  type               VendorType
+  country            String?
+  contractRef        String?
+  dueDiligenceStatus String?
+  models             AIModel[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+}
+
+model AIModel {
+  id              String             @id @default(cuid())
+  name            String
+  description     String?
+  type            ModelType
+  status          ModelStatus        @default(DRAFT)
+  businessUnit    String
+  owner           String
+  deployedAt      DateTime?
+  lastReviewedAt  DateTime?
+  currentRiskTier RiskTier?
+  vendorId        String?
+  vendor          Vendor?            @relation(fields: [vendorId], references: [id])
+  useCaseId       String
+  useCase         UseCase            @relation(fields: [useCaseId], references: [id])
+  riskAssessments RiskAssessment[]
+  workflows       WorkflowInstance[]
+  modelVersions   ModelVersion[]
+  controlEvidences ControlEvidence[]
+  auditEvents     AuditEvent[]       @relation("ModelAuditEvents")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([status])
+  @@index([currentRiskTier])
+  @@index([businessUnit])
+}
+
+model ModelVersion {
+  id         String    @id @default(cuid())
+  modelId    String
+  model      AIModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  version    String
+  changeLog  String?
+  approvedBy String?
+  approvedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([modelId])
+}
+
+model RiskAssessment {
+  id             String    @id @default(cuid())
+  modelId        String
+  model          AIModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  assessedAt     DateTime  @default(now())
+  assessedBy     String
+  methodology    String?
+  scores         Json
+  tier           RiskTier
+  rationale      String?
+  nextReviewDate DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([modelId])
+  @@index([tier])
+}
+
+model WorkflowInstance {
+  id            String         @id @default(cuid())
+  modelId       String
+  model         AIModel        @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  type          WorkflowType
+  status        WorkflowStatus @default(PENDING)
+  initiatedBy   String
+  currentStepId String?
+  dueDate       DateTime?
+  completedAt   DateTime?
+  steps         WorkflowStep[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([modelId])
+  @@index([status])
+}
+
+model WorkflowStep {
+  id                 String           @id @default(cuid())
+  workflowInstanceId String
+  workflowInstance   WorkflowInstance @relation(fields: [workflowInstanceId], references: [id], onDelete: Cascade)
+  stepOrder          Int
+  assignedTo         String
+  decision           String?
+  decidedAt          DateTime?
+  comments           String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([workflowInstanceId])
+}
+
+model Policy {
+  id              String    @id @default(cuid())
+  name            String
+  masReference    String?
+  category        String
+  version         String    @default("1.0")
+  applicableTiers String[]
+  controls        Control[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Control {
+  id               String            @id @default(cuid())
+  policyId         String
+  policy           Policy            @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  description      String
+  frequency        String?
+  evidenceRequired Boolean           @default(true)
+  evidences        ControlEvidence[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([policyId])
+}
+
+model ControlEvidence {
+  id         String                @id @default(cuid())
+  modelId    String
+  model      AIModel               @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  controlId  String
+  control    Control               @relation(fields: [controlId], references: [id], onDelete: Cascade)
+  fileUrl    String?
+  s3Key      String?
+  status     ControlEvidenceStatus @default(PENDING)
+  reviewedAt DateTime?
+  reviewedBy String?
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
+
+  @@index([modelId])
+  @@index([controlId])
+}
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  timestamp  DateTime @default(now())
+  actorId    String
+  actorRole  String
+  action     String
+  entityType String
+  entityId   String
+  before     Json?
+  after      Json?
+  ipAddress  String?
+  modelId    String?
+  model      AIModel? @relation("ModelAuditEvents", fields: [modelId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([timestamp])
+  @@index([actorId])
+}
