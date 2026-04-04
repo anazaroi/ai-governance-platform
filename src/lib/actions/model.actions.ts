@@ -29,14 +29,18 @@ export async function createModel(data: CreateModelInput) {
   const parsed = CreateModelSchema.safeParse(data)
   if (!parsed.success) return { error: 'Invalid input' as const }
 
-  const model = await db.aIModel.create({
-    data: {
-      ...parsed.data,
-      vendorId: parsed.data.vendorId ?? null,
-    },
-  })
-  revalidatePath('/models')
-  return { data: model }
+  try {
+    const model = await db.aIModel.create({
+      data: {
+        ...parsed.data,
+        vendorId: parsed.data.vendorId ?? null,
+      },
+    })
+    revalidatePath('/models')
+    return { data: model }
+  } catch {
+    return { error: 'Failed to create model' as const }
+  }
 }
 
 export async function updateModel(data: UpdateModelInput) {
@@ -47,24 +51,32 @@ export async function updateModel(data: UpdateModelInput) {
   if (!parsed.success) return { error: 'Invalid input' as const }
 
   const { id, ...rest } = parsed.data
-  const model = await db.aIModel.update({
-    where: { id },
-    data: { ...rest, vendorId: rest.vendorId ?? null },
-  })
-  revalidatePath('/models')
-  revalidatePath(`/models/${id}`)
-  return { data: model }
+  try {
+    const model = await db.aIModel.update({
+      where: { id },
+      data: { ...rest, vendorId: rest.vendorId ?? null },
+    })
+    revalidatePath('/models')
+    revalidatePath(`/models/${id}`)
+    return { data: model }
+  } catch {
+    return { error: 'Failed to update model' as const }
+  }
 }
 
 export async function retireModel(id: string) {
   const { userId } = await auth()
   if (!userId) return { error: 'Unauthorized' as const }
 
-  const model = await db.aIModel.update({
-    where: { id },
-    data: { status: 'RETIRED', lastReviewedAt: new Date() },
-  })
-  revalidatePath('/models')
-  revalidatePath(`/models/${id}`)
-  return { data: model }
+  try {
+    const model = await db.aIModel.update({
+      where: { id },
+      data: { status: 'RETIRED', lastReviewedAt: new Date() },
+    })
+    revalidatePath('/models')
+    revalidatePath(`/models/${id}`)
+    return { data: model }
+  } catch {
+    return { error: 'Failed to retire model' as const }
+  }
 }

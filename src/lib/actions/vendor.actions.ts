@@ -21,9 +21,13 @@ export async function createVendor(data: CreateVendorInput) {
   const parsed = VendorSchema.safeParse(data)
   if (!parsed.success) return { error: 'Invalid input' as const }
 
-  const vendor = await db.vendor.create({ data: parsed.data })
-  revalidatePath('/registry/vendors')
-  return { data: vendor }
+  try {
+    const vendor = await db.vendor.create({ data: parsed.data })
+    revalidatePath('/registry/vendors')
+    return { data: vendor }
+  } catch {
+    return { error: 'Failed to create vendor' as const }
+  }
 }
 
 export async function updateVendor(id: string, data: CreateVendorInput) {
@@ -33,17 +37,35 @@ export async function updateVendor(id: string, data: CreateVendorInput) {
   const parsed = VendorSchema.safeParse(data)
   if (!parsed.success) return { error: 'Invalid input' as const }
 
-  const vendor = await db.vendor.update({ where: { id }, data: parsed.data })
-  revalidatePath('/registry/vendors')
-  revalidatePath(`/registry/vendors/${id}`)
-  return { data: vendor }
+  try {
+    const vendor = await db.vendor.update({ where: { id }, data: parsed.data })
+    revalidatePath('/registry/vendors')
+    revalidatePath(`/registry/vendors/${id}`)
+    return { data: vendor }
+  } catch {
+    return { error: 'Failed to update vendor' as const }
+  }
 }
 
 export async function deleteVendor(id: string) {
   const { userId } = await auth()
   if (!userId) return { error: 'Unauthorized' as const }
 
-  await db.vendor.delete({ where: { id } })
-  revalidatePath('/registry/vendors')
-  return { data: { id } }
+  // Guard against vendors with linked models
+  const vendor = await db.vendor.findUnique({
+    where: { id },
+    include: { _count: { select: { models: true } } },
+  })
+  if (!vendor) return { error: 'Vendor not found' as const }
+  if (vendor._count.models > 0) {
+    return { error: `Cannot delete vendor with ${vendor._count.models} linked model(s). Unlink models first.` as const }
+  }
+
+  try {
+    await db.vendor.delete({ where: { id } })
+    revalidatePath('/registry/vendors')
+    return { data: { id } }
+  } catch {
+    return { error: 'Failed to delete vendor' as const }
+  }
 }

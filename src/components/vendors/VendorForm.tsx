@@ -13,6 +13,7 @@ const VendorFormSchema = z.object({
   type: z.enum(['INTERNAL', 'THIRD_PARTY']),
   country: z.string().optional(),
   contractRef: z.string().optional(),
+  dueDiligenceStatus: z.string().optional(),
 })
 
 interface VendorFormProps {
@@ -22,6 +23,7 @@ interface VendorFormProps {
     type: 'INTERNAL' | 'THIRD_PARTY'
     country?: string | null
     contractRef?: string | null
+    dueDiligenceStatus?: string | null
   }
 }
 
@@ -42,6 +44,7 @@ export function VendorForm({ defaultValues }: VendorFormProps) {
       type: formData.get('type') as 'INTERNAL' | 'THIRD_PARTY',
       country: (formData.get('country') as string) || undefined,
       contractRef: (formData.get('contractRef') as string) || undefined,
+      dueDiligenceStatus: (formData.get('dueDiligenceStatus') as string) || undefined,
     }
 
     const parsed = VendorFormSchema.safeParse(data)
@@ -129,6 +132,23 @@ export function VendorForm({ defaultValues }: VendorFormProps) {
           className="flex h-9 w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-sm text-slate-100 placeholder:text-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="e.g. CT-2026-001"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="dueDiligenceStatus" className="text-sm font-medium text-slate-200">
+          Due Diligence Status
+        </label>
+        <select
+          id="dueDiligenceStatus"
+          name="dueDiligenceStatus"
+          defaultValue={defaultValues?.dueDiligenceStatus ?? ''}
+          className="flex h-9 w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-sm text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        >
+          <option value="">Not started</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="COMPLETE">Complete</option>
+          <option value="FAILED">Failed</option>
+        </select>
       </div>
 
       <div className="flex gap-3">

@@ -6,6 +6,7 @@ jest.mock('@/lib/db', () => ({
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      findUnique: jest.fn(),
     },
   },
 }))
@@ -23,10 +24,11 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { createVendor, updateVendor, deleteVendor } from '@/lib/actions/vendor.actions'
 
-const mockCreate = db.vendor.create as jest.Mock
-const mockUpdate = db.vendor.update as jest.Mock
-const mockDelete = db.vendor.delete as jest.Mock
-const mockAuth = auth as jest.Mock
+const mockCreate = db.vendor.create as unknown as jest.Mock
+const mockUpdate = db.vendor.update as unknown as jest.Mock
+const mockDelete = db.vendor.delete as unknown as jest.Mock
+const mockFindUnique = db.vendor.findUnique as unknown as jest.Mock
+const mockAuth = auth as unknown as jest.Mock
 const mockRevalidate = revalidatePath as jest.Mock
 
 describe('createVendor', () => {
@@ -121,6 +123,7 @@ describe('deleteVendor', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockAuth.mockResolvedValue({ userId: 'user_test123' })
+    mockFindUnique.mockResolvedValue({ id: 'v1', _count: { models: 0 } })
   })
 
   it('deletes a vendor and revalidates path', async () => {
@@ -139,6 +142,24 @@ describe('deleteVendor', () => {
     const result = await deleteVendor('v1')
 
     expect(result).toEqual({ error: 'Unauthorized' })
+    expect(mockDelete).not.toHaveBeenCalled()
+  })
+
+  it('returns error when vendor not found', async () => {
+    mockFindUnique.mockResolvedValue(null)
+
+    const result = await deleteVendor('v1')
+
+    expect(result).toEqual({ error: 'Vendor not found' })
+    expect(mockDelete).not.toHaveBeenCalled()
+  })
+
+  it('returns error when vendor has linked models', async () => {
+    mockFindUnique.mockResolvedValue({ id: 'v1', _count: { models: 3 } })
+
+    const result = await deleteVendor('v1')
+
+    expect(result).toEqual({ error: 'Cannot delete vendor with 3 linked model(s). Unlink models first.' })
     expect(mockDelete).not.toHaveBeenCalled()
   })
 })

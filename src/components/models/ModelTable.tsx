@@ -46,7 +46,10 @@ export function ModelTable({ models }: ModelTableProps) {
   function handleRetire(id: string, name: string) {
     if (!confirm(`Are you sure you want to retire model "${name}"? This action sets the model status to RETIRED.`)) return
     startTransition(async () => {
-      await retireModel(id)
+      const result = await retireModel(id)
+      if ('error' in result) {
+        alert(`Failed to retire model: ${result.error}`)
+      }
     })
   }
 

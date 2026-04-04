@@ -24,7 +24,7 @@ import { createModel, updateModel, retireModel } from '@/lib/actions/model.actio
 
 const mockCreate = db.aIModel.create as jest.Mock
 const mockUpdate = db.aIModel.update as jest.Mock
-const mockAuth = auth as jest.Mock
+const mockAuth = auth as unknown as jest.Mock
 const mockRevalidate = revalidatePath as jest.Mock
 
 const validInput = {
