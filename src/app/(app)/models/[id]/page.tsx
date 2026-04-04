@@ -33,6 +33,9 @@ export default async function ModelDetailPage({ params }: ModelDetailPageProps) 
           )}
         </div>
         <div className="flex gap-2">
+          <Link href={`/models/${model.id}/assess`}>
+            <Button variant="outline" size="sm">Assess Risk</Button>
+          </Link>
           <Link href={`/models/${model.id}/edit`}>
             <Button variant="outline">Edit</Button>
           </Link>
@@ -151,9 +154,12 @@ export default async function ModelDetailPage({ params }: ModelDetailPageProps) 
               >
                 <div className="flex items-center gap-3">
                   <RiskTierBadge tier={assessment.tier} />
-                  <span className="text-sm text-slate-300">
+                  <Link
+                    href={`/assessments/${assessment.id}`}
+                    className="text-sm text-blue-400 hover:text-blue-300 hover:underline"
+                  >
                     Assessed by {assessment.assessedBy}
-                  </span>
+                  </Link>
                 </div>
                 <p className="text-xs text-slate-500">
                   {new Date(assessment.assessedAt).toLocaleDateString()}
