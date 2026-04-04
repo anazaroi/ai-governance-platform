@@ -1,19 +1,10 @@
 // src/middleware.ts
-// Clerk v7 requires NextRequest (edge runtime) — not compatible with Next.js 16 proxy.ts.
-// Keeping middleware.ts (deprecated but functional in Next.js 16) until Clerk releases proxy support.
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+// Initialises Clerk session headers on every request.
+// Route protection is handled in (app)/layout.tsx (Server Component) per Next.js 16 guidance:
+// proxy/middleware is for optimistic checks only, not full auth enforcement.
+import { clerkMiddleware } from '@clerk/nextjs/server'
 
-const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks/(.*)',
-])
-
-export default clerkMiddleware((auth, request) => {
-  if (!isPublicRoute(request)) {
-    auth.protect()
-  }
-})
+export default clerkMiddleware()
 
 export const config = {
   matcher: [
