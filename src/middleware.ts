@@ -1,6 +1,6 @@
-// src/proxy.ts
-// Next.js 16: uses proxy.ts (not middleware.ts). Export function named `proxy`.
-// Clerk v7 works with Node.js runtime (no edge runtime in proxy.ts).
+// src/middleware.ts
+// Clerk v7 requires NextRequest (edge runtime) — not compatible with Next.js 16 proxy.ts.
+// Keeping middleware.ts (deprecated but functional in Next.js 16) until Clerk releases proxy support.
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 const isPublicRoute = createRouteMatcher([
@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/(.*)',
 ])
 
-export const proxy = clerkMiddleware((auth, request) => {
+export default clerkMiddleware((auth, request) => {
   if (!isPublicRoute(request)) {
     auth.protect()
   }
