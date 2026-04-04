@@ -35,8 +35,8 @@ export async function getCurrentUser() {
   const { redirect } = await import('next/navigation')
   const { db } = await import('@/lib/db')
 
-  const { userId } = auth()
-  if (!userId) redirect('/sign-in')
+  const { userId } = await auth()
+  if (!userId) { redirect('/sign-in'); return null as never }
 
   const user = await db.orgUser.findUnique({ where: { clerkId: userId } })
   return user
@@ -49,7 +49,7 @@ export async function getCurrentUser() {
 export async function requireRole(minimumRole: UserRole) {
   const { redirect } = await import('next/navigation')
   const user = await getCurrentUser()
-  if (!user) redirect('/sign-in')
+  if (!user) { redirect('/sign-in'); return null as never }
 
   if (!hasPermission(user.role, minimumRole)) {
     throw new Error(`Insufficient role. Required: ${minimumRole}, got: ${user.role}`)

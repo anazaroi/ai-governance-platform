@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { UserRole } from '@/lib/constants'
 
 interface AuditPayloadInput {
@@ -47,5 +48,19 @@ export function buildAuditPayload(input: AuditPayloadInput): AuditPayload {
 export async function writeAuditEvent(input: AuditPayloadInput): Promise<void> {
   const { db } = await import('@/lib/db')
   const payload = buildAuditPayload(input)
-  await db.auditEvent.create({ data: payload })
+  // Use spread to conditionally include modelId — avoids Prisma union type conflict
+  // between checked (relation) and unchecked (scalar FK) input modes
+  await db.auditEvent.create({
+    data: {
+      actorId: payload.actorId,
+      actorRole: payload.actorRole,
+      action: payload.action,
+      entityType: payload.entityType,
+      entityId: payload.entityId,
+      before: payload.before !== null ? (payload.before as Prisma.InputJsonValue) : Prisma.DbNull,
+      after: payload.after !== null ? (payload.after as Prisma.InputJsonValue) : Prisma.DbNull,
+      ipAddress: payload.ipAddress,
+      ...(payload.modelId !== undefined && { modelId: payload.modelId }),
+    },
+  })
 }
