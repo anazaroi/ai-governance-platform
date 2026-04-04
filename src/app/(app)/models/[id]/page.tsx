@@ -33,6 +33,9 @@ export default async function ModelDetailPage({ params }: ModelDetailPageProps) 
           )}
         </div>
         <div className="flex gap-2">
+          <Link href={`/models/${model.id}/workflows/new`}>
+            <Button variant="outline" size="sm">Initiate Workflow</Button>
+          </Link>
           <Link href={`/models/${model.id}/assess`}>
             <Button variant="outline" size="sm">Assess Risk</Button>
           </Link>
@@ -183,9 +186,12 @@ export default async function ModelDetailPage({ params }: ModelDetailPageProps) 
                 className="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/50 px-4 py-3"
               >
                 <div>
-                  <span className="text-sm font-medium text-slate-200">
+                  <Link
+                    href={`/workflows/${workflow.id}`}
+                    className="text-sm font-medium text-blue-400 hover:text-blue-300 hover:underline"
+                  >
                     {workflow.type.replace(/_/g, ' ')}
-                  </span>
+                  </Link>
                   <span className="ml-2 text-xs text-slate-400">
                     by {workflow.initiatedBy}
                   </span>
