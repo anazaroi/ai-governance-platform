@@ -1,0 +1,134 @@
+<h2>Infrastructure & Operations</h2>
+<p class="subtitle">Section 5 of 5 — How you provision tenants, ship updates, and operate the platform solo.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+
+  <!-- Full Tech Stack -->
+  <div style="background:rgba(15,23,42,0.8);border:1.5px solid rgba(100,116,139,0.4);border-radius:12px;padding:18px;">
+    <p class="label" style="color:#94a3b8;margin-bottom:14px;">FULL TECH STACK</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.78em;">
+      <div>
+        <p style="opacity:0.5;margin:0 0 6px;font-size:0.85em;">Frontend</p>
+        <div style="line-height:2;">
+          <strong>Next.js 14+</strong> App Router<br/>
+          <strong>TypeScript</strong> end-to-end<br/>
+          <strong>shadcn/ui</strong> components<br/>
+          <strong>Tremor</strong> charts & dashboards<br/>
+          <strong>TanStack Query</strong> data fetching<br/>
+          <strong>React PDF</strong> board report export
+        </div>
+      </div>
+      <div>
+        <p style="opacity:0.5;margin:0 0 6px;font-size:0.85em;">Backend</p>
+        <div style="line-height:2;">
+          <strong>Next.js API Routes</strong> (same repo)<br/>
+          <strong>Prisma ORM</strong> + migrations<br/>
+          <strong>Neon</strong> serverless Postgres<br/>
+          <strong>Inngest</strong> workflows & jobs<br/>
+          <strong>Clerk</strong> auth + SSO<br/>
+          <strong>Zod</strong> input validation
+        </div>
+      </div>
+      <div>
+        <p style="opacity:0.5;margin:0 0 6px;font-size:0.85em;">Infrastructure</p>
+        <div style="line-height:2;">
+          <strong>AWS ECS Fargate</strong> compute<br/>
+          <strong>AWS S3</strong> evidence vault<br/>
+          <strong>AWS SES</strong> email notifications<br/>
+          <strong>Pulumi</strong> IaC (TypeScript)<br/>
+          <strong>ECR</strong> container registry<br/>
+          <strong>Route 53</strong> subdomain per tenant
+        </div>
+      </div>
+      <div>
+        <p style="opacity:0.5;margin:0 0 6px;font-size:0.85em;">Observability</p>
+        <div style="line-height:2;">
+          <strong>Sentry</strong> error tracking<br/>
+          <strong>Axiom</strong> log management<br/>
+          <strong>GitHub Actions</strong> CI/CD<br/>
+          <strong>Stripe</strong> billing<br/>
+          <strong>Resend</strong> transactional email<br/>
+          <strong>AWS CloudWatch</strong> infra metrics
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:8px;background:rgba(99,102,241,0.1);border-radius:6px;font-size:0.75em;">
+      One language (TypeScript) end-to-end — frontend, backend, infra, and migrations all in one monorepo.
+    </div>
+  </div>
+
+  <!-- Tenant Provisioning Flow -->
+  <div style="background:rgba(34,197,94,0.04);border:1.5px solid rgba(34,197,94,0.3);border-radius:12px;padding:18px;">
+    <p class="label" style="color:#4ade80;margin-bottom:14px;">NEW TENANT PROVISIONING FLOW</p>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:0.78em;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(34,197,94,0.2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8em;font-weight:700;">1</div>
+        <div>Customer signs contract → triggers <strong>provisioning webhook</strong></div>
+      </div>
+      <div style="width:1px;height:8px;background:rgba(34,197,94,0.3);margin-left:11px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(34,197,94,0.2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8em;font-weight:700;">2</div>
+        <div><strong>Pulumi</strong> spins up: ECS service + task, Neon DB branch, S3 bucket, Route 53 subdomain <span style="opacity:0.6">(~3 min)</span></div>
+      </div>
+      <div style="width:1px;height:8px;background:rgba(34,197,94,0.3);margin-left:11px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(34,197,94,0.2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8em;font-weight:700;">3</div>
+        <div><strong>Prisma</strong> runs migrations on fresh DB + seeds MAS policy templates</div>
+      </div>
+      <div style="width:1px;height:8px;background:rgba(34,197,94,0.3);margin-left:11px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(34,197,94,0.2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8em;font-weight:700;">4</div>
+        <div><strong>Clerk</strong> creates org, sends Admin invite to firm's IT contact</div>
+      </div>
+      <div style="width:1px;height:8px;background:rgba(34,197,94,0.3);margin-left:11px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(34,197,94,0.2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8em;font-weight:700;">5</div>
+        <div>Customer accesses <strong>acme-bank.yourplatform.com</strong> — fully isolated environment, ready to use</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:8px;background:rgba(34,197,94,0.1);border-radius:6px;font-size:0.75em;">
+      Fully automated. Zero manual steps from contract to live environment.
+    </div>
+  </div>
+
+  <!-- CI/CD Pipeline -->
+  <div style="background:rgba(245,158,11,0.04);border:1.5px solid rgba(245,158,11,0.3);border-radius:12px;padding:18px;">
+    <p class="label" style="color:#fbbf24;margin-bottom:14px;">CI/CD — SHIPPING UPDATES TO ALL TENANTS</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <strong>GitHub Actions pipeline:</strong><br/>
+      <span style="opacity:0.5;">Push to main →</span> TypeScript typecheck + lint<br/>
+      <span style="opacity:0.5;">→</span> Unit + integration tests<br/>
+      <span style="opacity:0.5;">→</span> Docker build → push to ECR<br/>
+      <span style="opacity:0.5;">→</span> Pulumi updates all ECS task definitions<br/>
+      <span style="opacity:0.5;">→</span> Rolling deploy — one tenant at a time, zero downtime<br/>
+      <span style="opacity:0.5;">→</span> Prisma migrations run per tenant DB on startup<br/>
+      <span style="opacity:0.5;">→</span> Sentry release tagged for error tracking
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(245,158,11,0.12);border-radius:6px;font-size:0.75em;">
+      One deploy ships to all customers simultaneously — same Docker image, isolated DBs. DB migrations are backwards-compatible so rollbacks are safe.
+    </div>
+  </div>
+
+  <!-- Solo Founder Operations -->
+  <div style="background:rgba(139,92,246,0.04);border:1.5px solid rgba(139,92,246,0.3);border-radius:12px;padding:18px;">
+    <p class="label" style="color:#a78bfa;margin-bottom:14px;">OPERATING THIS SOLO</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <strong>Your admin portal shows:</strong><br/>
+      📊 All tenant health + uptime at a glance<br/>
+      🔔 Sentry alerts → Slack for errors<br/>
+      💳 Stripe dashboard for billing/MRR<br/>
+      📧 Resend for all transactional emails<br/><br/>
+      <strong>Monthly ops tasks:</strong><br/>
+      🔄 Update MAS policy templates when guidance changes<br/>
+      📦 Neon handles DB scaling — no manual tuning<br/>
+      🐳 ECS Fargate — no servers to patch<br/>
+      🔑 Clerk handles SSO integrations per customer
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(139,92,246,0.12);border-radius:6px;font-size:0.75em;">
+      Fully managed services throughout — your job is building product, not managing infrastructure.
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:20px;font-size:0.85em;opacity:0.6;text-align:center;">Does this infrastructure approach work for you? Any concerns before we write the full spec?</p>

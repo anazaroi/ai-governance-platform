@@ -1,0 +1,199 @@
+<h2>Auth & Access Control (RBAC)</h2>
+<p class="subtitle">Section 4 of 5 — Who can do what. Managed via Clerk organisations + your own role table.</p>
+
+<div style="margin-top:20px;">
+
+  <!-- Role definitions -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;">
+    <div style="background:rgba(239,68,68,0.1);border:1.5px solid rgba(239,68,68,0.35);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:1.4em;margin-bottom:4px;">👔</div>
+      <strong style="font-size:0.85em;">Executive</strong>
+      <p style="font-size:0.72em;opacity:0.7;margin:6px 0 0;">CRO, COO, CIO<br/>Read-only + reports</p>
+    </div>
+    <div style="background:rgba(245,158,11,0.1);border:1.5px solid rgba(245,158,11,0.35);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:1.4em;margin-bottom:4px;">🔬</div>
+      <strong style="font-size:0.85em;">Model Risk Analyst</strong>
+      <p style="font-size:0.72em;opacity:0.7;margin:6px 0 0;">Registers models, runs assessments, uploads evidence</p>
+    </div>
+    <div style="background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:1.4em;margin-bottom:4px;">✅</div>
+      <strong style="font-size:0.85em;">Approver</strong>
+      <p style="font-size:0.72em;opacity:0.7;margin:6px 0 0;">Participates in workflow steps, approve / reject decisions</p>
+    </div>
+    <div style="background:rgba(139,92,246,0.1);border:1.5px solid rgba(139,92,246,0.35);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:1.4em;margin-bottom:4px;">📋</div>
+      <strong style="font-size:0.85em;">Compliance Officer</strong>
+      <p style="font-size:0.72em;opacity:0.7;margin:6px 0 0;">Manages policies, controls, and compliance tracking</p>
+    </div>
+    <div style="background:rgba(99,102,241,0.1);border:1.5px solid rgba(99,102,241,0.35);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:1.4em;margin-bottom:4px;">⚙️</div>
+      <strong style="font-size:0.85em;">Admin</strong>
+      <p style="font-size:0.72em;opacity:0.7;margin:6px 0 0;">Manages users, configures platform settings and workflow templates</p>
+    </div>
+  </div>
+
+  <!-- Permission matrix -->
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.78em;">
+      <thead>
+        <tr style="border-bottom:1.5px solid rgba(255,255,255,0.15);">
+          <th style="text-align:left;padding:8px 12px;opacity:0.6;font-weight:500;">Module / Action</th>
+          <th style="text-align:center;padding:8px;color:#f87171;">Executive</th>
+          <th style="text-align:center;padding:8px;color:#fbbf24;">MR Analyst</th>
+          <th style="text-align:center;padding:8px;color:#4ade80;">Approver</th>
+          <th style="text-align:center;padding:8px;color:#a78bfa;">Compliance</th>
+          <th style="text-align:center;padding:8px;color:#818cf8;">Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(99,102,241,0.04);">
+          <td style="padding:8px 12px;opacity:0.5;font-size:0.85em;letter-spacing:0.05em;">SYSTEM OF RECORD</td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">View AI inventory</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Register / edit model</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Retire / archive model</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(239,68,68,0.03);">
+          <td style="padding:8px 12px;opacity:0.5;font-size:0.85em;letter-spacing:0.05em;">RISK TIERING ENGINE</td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Run risk assessment</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">View risk tier & rationale</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Configure tiering weights</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(245,158,11,0.03);">
+          <td style="padding:8px 12px;opacity:0.5;font-size:0.85em;letter-spacing:0.05em;">APPROVAL WORKFLOW</td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Initiate workflow</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Approve / reject step</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Configure workflow templates</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(139,92,246,0.03);">
+          <td style="padding:8px 12px;opacity:0.5;font-size:0.85em;letter-spacing:0.05em;">POLICY & CONTROL LIBRARY</td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">View policies & controls</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Link policies to models</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Upload control evidence</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(99,102,241,0.03);">
+          <td style="padding:8px 12px;opacity:0.5;font-size:0.85em;letter-spacing:0.05em;">DASHBOARDS & REPORTING</td>
+          <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">View CRO dashboard</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:6px 12px 6px 20px;">Generate board report PDF</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 12px 6px 20px;">View audit trail</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;opacity:0.3;">—</td>
+          <td style="text-align:center;">✅</td>
+          <td style="text-align:center;">✅</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:16px;padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.78em;opacity:0.85;">
+    <strong>How it works:</strong> Clerk manages org membership and SSO. Your DB stores a <code>user_role</code> enum per user per org. Every API route checks role before executing. The Executive role is deliberately read-only — CROs get visibility without the ability to accidentally change data before an audit.
+  </div>
+
+</div>
+
+<p style="margin-top:20px;font-size:0.85em;opacity:0.6;text-align:center;">Does this permission structure look right? Any roles or permissions that need adjusting?</p>

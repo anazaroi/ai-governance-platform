@@ -1,0 +1,105 @@
+<h2>Core Data Model</h2>
+<p class="subtitle">Section 2 of 5 — The key entities and how they relate. Every module reads and writes to these.</p>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;">
+
+  <!-- AI Model (central) -->
+  <div style="grid-column:2;background:rgba(99,102,241,0.15);border:2px solid rgba(99,102,241,0.6);border-radius:10px;padding:14px;">
+    <p class="label" style="color:#818cf8;margin-bottom:8px;text-align:center;">CORE ENTITY</p>
+    <h3 style="text-align:center;margin:0 0 10px;">AIModel</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · name · description<br/>
+      type <span style="opacity:0.5">(LLM / ML / RPA / Rules)</span><br/>
+      status <span style="opacity:0.5">(Draft / Active / Retired)</span><br/>
+      businessUnit · owner<br/>
+      deployedAt · lastReviewedAt<br/>
+      <span style="color:#818cf8;">currentRiskTier</span> → RiskTier<br/>
+      <span style="color:#818cf8;">vendorId</span> → Vendor (nullable)<br/>
+      <span style="color:#818cf8;">useCaseId</span> → UseCase
+    </div>
+  </div>
+
+  <!-- UseCase -->
+  <div style="grid-column:1;grid-row:1;background:rgba(34,197,94,0.08);border:1.5px solid rgba(34,197,94,0.35);border-radius:10px;padding:14px;align-self:center;">
+    <h3 style="margin:0 0 8px;">UseCase</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · name · description<br/>
+      regulatoryCategory<br/>
+      <span style="opacity:0.5">(Credit / AML / Trading / etc.)</span>
+    </div>
+    <p style="font-size:0.7em;color:#4ade80;margin:8px 0 0;">One AIModel → one UseCase</p>
+  </div>
+
+  <!-- Vendor -->
+  <div style="grid-column:3;grid-row:1;background:rgba(34,197,94,0.08);border:1.5px solid rgba(34,197,94,0.35);border-radius:10px;padding:14px;align-self:center;">
+    <h3 style="margin:0 0 8px;">Vendor</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · name · type<br/>
+      <span style="opacity:0.5">(Internal / Third-party)</span><br/>
+      country · contractRef<br/>
+      dueDiligenceStatus
+    </div>
+    <p style="font-size:0.7em;color:#4ade80;margin:8px 0 0;">Nullable — internal models have no vendor</p>
+  </div>
+
+  <!-- RiskAssessment -->
+  <div style="grid-column:1;grid-row:2;background:rgba(239,68,68,0.08);border:1.5px solid rgba(239,68,68,0.35);border-radius:10px;padding:14px;">
+    <h3 style="margin:0 0 8px;">RiskAssessment</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · modelId · assessedAt<br/>
+      assessedBy · methodology<br/>
+      scores <span style="opacity:0.5">(JSONB — per dimension)</span><br/>
+      <strong>tier</strong> <span style="opacity:0.5">(High / Medium / Low)</span><br/>
+      rationale · nextReviewDate
+    </div>
+    <p style="font-size:0.7em;color:#f87171;margin:8px 0 0;">One model → many assessments over time</p>
+  </div>
+
+  <!-- WorkflowInstance (centre row 2) -->
+  <div style="grid-column:2;grid-row:2;background:rgba(245,158,11,0.08);border:1.5px solid rgba(245,158,11,0.4);border-radius:10px;padding:14px;">
+    <h3 style="margin:0 0 8px;">WorkflowInstance</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · modelId · type<br/>
+      <span style="opacity:0.5">(Onboarding / Change / Retirement)</span><br/>
+      status <span style="opacity:0.5">(Pending / InReview / Approved / Rejected)</span><br/>
+      initiatedBy · currentStepId<br/>
+      dueDate · completedAt
+    </div>
+    <div style="font-size:0.75em;margin-top:8px;padding:6px 8px;background:rgba(245,158,11,0.15);border-radius:6px;">
+      ↓ WorkflowStep<br/>
+      <span style="opacity:0.7;">stepOrder · assignedTo · decision · decidedAt · comments</span>
+    </div>
+  </div>
+
+  <!-- Policy + Control -->
+  <div style="grid-column:3;grid-row:2;background:rgba(139,92,246,0.08);border:1.5px solid rgba(139,92,246,0.35);border-radius:10px;padding:14px;">
+    <h3 style="margin:0 0 8px;">Policy</h3>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;">
+      id · name · masReference<br/>
+      category · version<br/>
+      applicableTiers <span style="opacity:0.5">(array)</span>
+    </div>
+    <div style="font-size:0.75em;margin-top:8px;padding:6px 8px;background:rgba(139,92,246,0.15);border-radius:6px;">
+      ↓ Control<br/>
+      <span style="opacity:0.7;">id · policyId · description · frequency · evidenceRequired</span>
+    </div>
+    <div style="font-size:0.75em;margin-top:6px;padding:6px 8px;background:rgba(139,92,246,0.1);border-radius:6px;">
+      ↓ ControlEvidence<br/>
+      <span style="opacity:0.7;">modelId · controlId · fileUrl · status · reviewedAt</span>
+    </div>
+  </div>
+
+  <!-- AuditEvent -->
+  <div style="grid-column:1/4;background:rgba(15,23,42,0.6);border:1.5px solid rgba(100,116,139,0.4);border-radius:10px;padding:14px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;">
+    <div>
+      <h3 style="margin:0 0 6px;">AuditEvent</h3>
+      <p style="font-size:0.7em;color:#94a3b8;margin:0;">Immutable append-only log — written on every state change across all modules</p>
+    </div>
+    <div style="font-size:0.75em;opacity:0.85;line-height:1.8;font-family:monospace;">
+      id · timestamp · actorId · actorRole · action · entityType · entityId · before(JSONB) · after(JSONB) · ipAddress
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:20px;font-size:0.85em;opacity:0.6;text-align:center">Does this data model make sense? Any entities missing or named differently to how you think about it?</p>

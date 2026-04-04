@@ -1,0 +1,78 @@
+<h2>Platform Architecture</h2>
+<p class="subtitle">Section 1 of 5 — Overall structure and tenancy model. Does this look right?</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+
+  <!-- Control Plane -->
+  <div style="background:rgba(99,102,241,0.08);border:1.5px solid rgba(99,102,241,0.4);border-radius:12px;padding:20px;">
+    <p class="label" style="color:#818cf8;margin-bottom:12px;">CONTROL PLANE — shared across all customers</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="background:rgba(99,102,241,0.15);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Clerk</strong><br/>Auth, SSO, org management
+      </div>
+      <div style="background:rgba(99,102,241,0.15);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Billing Service</strong><br/>Stripe, subscription mgmt
+      </div>
+      <div style="background:rgba(99,102,241,0.15);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Provisioning</strong><br/>Pulumi — spins up tenant envs
+      </div>
+      <div style="background:rgba(99,102,241,0.15);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Admin Portal</strong><br/>Your internal ops dashboard
+      </div>
+    </div>
+    <p style="font-size:0.75em;opacity:0.6;margin-top:10px;margin-bottom:0;">Hosted: AWS ap-southeast-1 (Singapore)</p>
+  </div>
+
+  <!-- Data Plane -->
+  <div style="background:rgba(34,197,94,0.06);border:1.5px solid rgba(34,197,94,0.35);border-radius:12px;padding:20px;">
+    <p class="label" style="color:#4ade80;margin-bottom:12px;">DATA PLANE — one isolated environment per customer</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;">
+      <div style="background:rgba(34,197,94,0.12);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Next.js App (AWS ECS / Fargate)</strong><br/>Frontend + API routes for that firm only
+      </div>
+      <div style="background:rgba(34,197,94,0.12);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Neon PostgreSQL (dedicated branch)</strong><br/>Isolated DB — zero shared data with other firms
+      </div>
+      <div style="background:rgba(34,197,94,0.12);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>Inngest (workflow engine)</strong><br/>Approval flows, periodic reviews, notifications
+      </div>
+      <div style="background:rgba(34,197,94,0.12);border-radius:8px;padding:10px;font-size:0.8em;">
+        <strong>S3 (evidence vault)</strong><br/>Model docs, audit evidence, board reports
+      </div>
+    </div>
+    <p style="font-size:0.75em;opacity:0.6;margin-top:10px;margin-bottom:0;">All data stays in AWS ap-southeast-1 — MAS data residency compliant</p>
+  </div>
+
+</div>
+
+<!-- Module Layer -->
+<div style="background:rgba(245,158,11,0.06);border:1.5px solid rgba(245,158,11,0.35);border-radius:12px;padding:20px;margin-top:16px;">
+  <p class="label" style="color:#fbbf24;margin-bottom:12px;">PHASE 1 MODULES — all live within each tenant's data plane</p>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>System of Record</strong><br/>AI inventory
+    </div>
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>Model & Vendor Registry</strong><br/>Catalogue
+    </div>
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>Risk Tiering Engine</strong><br/>H/M/L scoring
+    </div>
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>Approval Workflow</strong><br/>Sign-off flows
+    </div>
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>Dashboards & Reporting</strong><br/>Board-ready
+    </div>
+    <div style="background:rgba(245,158,11,0.12);border-radius:8px;padding:10px;font-size:0.75em;text-align:center;">
+      <strong>Policy Library</strong><br/>MAS-mapped
+    </div>
+  </div>
+</div>
+
+<!-- Flow -->
+<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:0.8em;opacity:0.8;">
+  <strong>Onboarding flow:</strong> New customer signs contract → Pulumi provisions their isolated Next.js + Neon + S3 environment in AWS Singapore → Clerk creates their org → they get a subdomain (e.g. <em>dbs.yourplatform.com</em>) → their users log in and start registering AI models
+</div>
+
+<p style="margin-top:20px;font-size:0.85em;opacity:0.6;text-align:center">Does this architecture look right? Any questions before we go deeper into the modules?</p>

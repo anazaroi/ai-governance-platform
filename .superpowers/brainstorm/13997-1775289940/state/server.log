@@ -1,0 +1,13 @@
+{"type":"server-started","port":61986,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:61986","screen_dir":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content","state_dir":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/state"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/module-phasing.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/waiting-1.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/phase1-scope.html"}
+{"source":"user-event","type":"click","text":"1\n        \n          System of Record\n          Full AI inventory — the foundation everything else builds on","choice":"sor","id":null,"timestamp":1775290210578}
+{"source":"user-event","type":"click","text":"2\n        \n          Model & Vendor Registry\n          Who owns what model, what vendor, what version","choice":"registry","id":null,"timestamp":1775290212162}
+{"source":"user-event","type":"click","text":"3\n        \n          AI Risk Tiering Engine\n          CRO's first question: \"which models are highest risk?\"","choice":"tiering","id":null,"timestamp":1775290212996}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/waiting-2.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/architecture-overview.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/data-model.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/modules-design.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/rbac-design.html"}
+{"type":"screen-added","file":"/Users/andrian.nazaroi.e/Developer/test/.superpowers/brainstorm/13997-1775289940/content/infrastructure.html"}

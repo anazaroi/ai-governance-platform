@@ -1,0 +1,122 @@
+<h2>Module Designs</h2>
+<p class="subtitle">Section 3 of 5 — What each module does, its key screens, and how it connects to the others.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+
+  <!-- Module 1: System of Record -->
+  <div style="background:rgba(99,102,241,0.07);border:1.5px solid rgba(99,102,241,0.35);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(99,102,241,0.25);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#818cf8;">MODULE 1</div>
+      <h3 style="margin:0;">System of Record</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> The authoritative inventory of every AI system in the firm. The first thing a new customer populates.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      📋 <strong>AI Inventory table</strong> — filterable list of all models, status, tier, owner, last review date<br/>
+      ➕ <strong>Register model form</strong> — structured intake: name, type, business unit, use case, vendor, deployment scope<br/>
+      🔍 <strong>Model detail page</strong> — full profile, version history, linked risk assessments, workflow history, evidence<br/>
+      📥 <strong>Bulk import</strong> — CSV/Excel upload for firms migrating from spreadsheets (common at launch)
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(99,102,241,0.12);border-radius:6px;font-size:0.75em;">
+      Triggers → Risk Tiering Engine automatically on model registration
+    </div>
+  </div>
+
+  <!-- Module 2: Model & Vendor Registry -->
+  <div style="background:rgba(34,197,94,0.06);border:1.5px solid rgba(34,197,94,0.3);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(34,197,94,0.2);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#4ade80;">MODULE 2</div>
+      <h3 style="margin:0;">Model & Vendor Registry</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> Deeper catalogue layer — model versioning, vendor due diligence, ownership, and dependency mapping.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      📦 <strong>Model versions list</strong> — every version of a model with change log and who approved each<br/>
+      🏢 <strong>Vendor directory</strong> — OpenAI, AWS Bedrock, internal teams; contract ref, country, risk status<br/>
+      🔗 <strong>Dependency map</strong> — which business processes depend on which models (impact analysis)<br/>
+      👤 <strong>Ownership matrix</strong> — model owner, business sponsor, technical owner, reviewer
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(34,197,94,0.1);border-radius:6px;font-size:0.75em;">
+      Feeds → Dashboards (vendor exposure, model concentration risk)
+    </div>
+  </div>
+
+  <!-- Module 3: Risk Tiering Engine -->
+  <div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.3);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(239,68,68,0.2);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#f87171;">MODULE 3</div>
+      <h3 style="margin:0;">AI Risk Tiering Engine</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> Structured questionnaire → weighted scoring → automated tier assignment (High / Medium / Low). Configurable per firm.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      📝 <strong>Assessment questionnaire</strong> — 20-30 questions across 5 dimensions (see below)<br/>
+      📊 <strong>Scoring breakdown</strong> — dimension scores, final tier, rationale auto-generated<br/>
+      ⚙️ <strong>Tiering config</strong> — admin can adjust weights, thresholds, add custom questions<br/>
+      📅 <strong>Review scheduler</strong> — auto-triggers reassessment based on tier (High = 6mo, Medium = 12mo, Low = 24mo)
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(239,68,68,0.1);border-radius:6px;font-size:0.75em;">
+      <strong>5 risk dimensions:</strong> Model Complexity · Business Criticality · Data Sensitivity · Explainability · Regulatory Exposure
+    </div>
+  </div>
+
+  <!-- Module 4: Approval Workflow -->
+  <div style="background:rgba(245,158,11,0.06);border:1.5px solid rgba(245,158,11,0.35);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(245,158,11,0.2);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#fbbf24;">MODULE 4</div>
+      <h3 style="margin:0;">Approval & Governance Workflow</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> Structured review and sign-off for model onboarding, changes, and retirement. Powered by Inngest.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      📬 <strong>My Tasks inbox</strong> — items awaiting your review/decision, sorted by due date<br/>
+      🔄 <strong>Workflow templates</strong> — configurable step sequences per workflow type and risk tier<br/>
+      📋 <strong>Workflow tracker</strong> — visual step-by-step progress for any model in review<br/>
+      ✅ <strong>Decision panel</strong> — approve/reject with mandatory comments, auto-recorded to audit log
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(245,158,11,0.12);border-radius:6px;font-size:0.75em;">
+      High-tier models → longer approval chains (e.g. Analyst → Model Risk → CRO). Low tier → lighter touch.
+    </div>
+  </div>
+
+  <!-- Module 5: Dashboards & Reporting -->
+  <div style="background:rgba(139,92,246,0.06);border:1.5px solid rgba(139,92,246,0.35);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(139,92,246,0.2);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#a78bfa;">MODULE 5</div>
+      <h3 style="margin:0;">Dashboards & Board Reporting</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> What the CRO/COO sees. Risk portfolio at a glance, board-ready PDF reports, MAS examination readiness score.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      🎯 <strong>CRO Dashboard</strong> — risk tier distribution, open workflows, overdue reviews, top risks<br/>
+      📈 <strong>Portfolio risk view</strong> — models by business unit, vendor concentration, trend over time<br/>
+      📄 <strong>Board report generator</strong> — one-click PDF: AI risk summary for board/BRMC meeting pack<br/>
+      🛡️ <strong>MAS Readiness Score</strong> — % of models assessed, % of controls evidenced, gaps flagged
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(139,92,246,0.12);border-radius:6px;font-size:0.75em;">
+      This is your demo hook — show a CRO their full AI risk picture in 60 seconds.
+    </div>
+  </div>
+
+  <!-- Module 6: Policy Library -->
+  <div style="background:rgba(20,184,166,0.06);border:1.5px solid rgba(20,184,166,0.35);border-radius:12px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(20,184,166,0.2);border-radius:6px;padding:4px 10px;font-size:0.75em;font-weight:700;color:#2dd4bf;">MODULE 6</div>
+      <h3 style="margin:0;">Policy & Control Library</h3>
+    </div>
+    <p style="font-size:0.8em;opacity:0.8;margin:0 0 12px;"><strong>Purpose:</strong> Pre-built MAS-mapped policies and controls. Firms select what applies, link evidence, track compliance status.</p>
+    <div style="font-size:0.78em;line-height:2;">
+      <span style="opacity:0.5;">Key screens:</span><br/>
+      📚 <strong>Policy catalogue</strong> — library of MAS-mapped policies (pre-loaded, kept current by you)<br/>
+      🔗 <strong>Model-policy linker</strong> — assign relevant policies to each AI model by tier/use case<br/>
+      📁 <strong>Evidence manager</strong> — upload test results, validation docs, monitoring reports per control<br/>
+      🚦 <strong>Compliance heatmap</strong> — which models × controls are green/amber/red
+    </div>
+    <div style="margin-top:10px;padding:8px;background:rgba(20,184,166,0.12);border-radius:6px;font-size:0.75em;">
+      You maintain the MAS policy templates — this is your moat. Competitors can't easily replicate current, accurate, Singapore-specific content.
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:20px;font-size:0.85em;opacity:0.6;text-align:center;">Does this module breakdown look right? Any screens or features that are wrong or missing?</p>

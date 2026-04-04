@@ -1,0 +1,73 @@
+<h2>Phase 1 Scope</h2>
+<p class="subtitle">Given your buyer is the CRO/COO, which modules form the minimum viable product that gets you a first signed contract?</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;">
+
+  <div>
+    <p class="label" style="color:#22c55e;margin-bottom:12px;">&#x2714; Core Foundation (must-have for any sale)</p>
+    <div class="options" data-multiselect style="gap:10px;">
+      <div class="option" data-choice="sor" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">1</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">System of Record</h3>
+          <p style="font-size:0.8em;">Full AI inventory — the foundation everything else builds on</p>
+        </div>
+      </div>
+      <div class="option" data-choice="registry" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">2</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">Model & Vendor Registry</h3>
+          <p style="font-size:0.8em;">Who owns what model, what vendor, what version</p>
+        </div>
+      </div>
+      <div class="option" data-choice="tiering" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">3</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">AI Risk Tiering Engine</h3>
+          <p style="font-size:0.8em;">CRO's first question: "which models are highest risk?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="label" style="color:#f59e0b;margin-bottom:12px;">&#x26A0; High-value but potentially Phase 2</p>
+    <div class="options" data-multiselect style="gap:10px;">
+      <div class="option" data-choice="workflow" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">4</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">Approval & Governance Workflow</h3>
+          <p style="font-size:0.8em;">Model onboarding sign-off; needed for audit trail</p>
+        </div>
+      </div>
+      <div class="option" data-choice="reporting" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">5</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">Dashboards & Board Reporting</h3>
+          <p style="font-size:0.8em;">What the CRO shows the board — strong demo hook</p>
+        </div>
+      </div>
+      <div class="option" data-choice="tpvr" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">6</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">Third-Party Vendor Risk</h3>
+          <p style="font-size:0.8em;">Critical for banks using OpenAI, etc. — but complex</p>
+        </div>
+      </div>
+      <div class="option" data-choice="policy" onclick="toggleSelect(this)" style="padding:12px 16px;">
+        <div class="letter" style="font-size:0.8em;width:24px;height:24px;">7</div>
+        <div class="content">
+          <h3 style="font-size:0.95em;">Policy & Control Library</h3>
+          <p style="font-size:0.8em;">MAS-mapped templates — high perceived value, moderate build effort</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:8px;padding:16px;margin-top:24px;">
+  <p style="margin:0;font-size:0.85em;"><strong>My read:</strong> Modules 1+2+3+5 give a CRO a compelling demo in 20 minutes — "here's every AI model in your firm, here's their risk tier, here's your board report." Modules 4+7 are needed for a real production deployment. Module 6 (vendor risk) is a differentiator but adds significant scope.</p>
+</div>
+
+<p style="margin-top:16px;font-size:0.85em;opacity:0.6;text-align:center">Select what you think belongs in Phase 1 — then confirm in the terminal</p>
