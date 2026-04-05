@@ -6,12 +6,13 @@ import { submitEvidence } from '@/lib/actions/evidence.actions'
 interface EvidenceSubmitFormProps {
   modelId: string
   controlId: string
+  currentFileUrl?: string | null
   currentStatus?: string
 }
 
-export function EvidenceSubmitForm({ modelId, controlId, currentStatus }: EvidenceSubmitFormProps) {
+export function EvidenceSubmitForm({ modelId, controlId, currentFileUrl, currentStatus }: EvidenceSubmitFormProps) {
   const [isPending, startTransition] = useTransition()
-  const [fileUrl, setFileUrl] = useState('')
+  const [fileUrl, setFileUrl] = useState(currentFileUrl ?? '')
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
