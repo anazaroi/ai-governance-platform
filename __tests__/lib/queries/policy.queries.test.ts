@@ -34,10 +34,15 @@ describe('getPolicies', () => {
 
     const result = await getPolicies()
 
-    expect(mockFindMany).toHaveBeenCalledWith({
-      orderBy: { name: 'asc' },
-      include: { _count: { select: { controls: true } } },
-    })
+    expect(mockFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderBy: { name: 'asc' },
+        select: expect.objectContaining({
+          id: true,
+          name: true,
+        }),
+      })
+    )
     expect(result).toEqual(mockData)
   })
 

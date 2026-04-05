@@ -3,7 +3,15 @@ import { db } from '@/lib/db'
 export async function getPolicies() {
   return db.policy.findMany({
     orderBy: { name: 'asc' },
-    include: { _count: { select: { controls: true } } },
+    select: {
+      id: true,
+      name: true,
+      masReference: true,
+      category: true,
+      version: true,
+      applicableTiers: true,
+      _count: { select: { controls: true } },
+    },
   })
 }
 
