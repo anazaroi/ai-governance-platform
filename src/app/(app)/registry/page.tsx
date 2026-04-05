@@ -2,11 +2,15 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { getModels } from '@/lib/queries/model.queries'
 import { getVendors } from '@/lib/queries/vendor.queries'
+import { getUseCases } from '@/lib/queries/usecase.queries'
 
 export default async function RegistryPage() {
-  const [models, vendors] = await Promise.all([getModels(), getVendors()])
+  const [models, vendors, useCases] = await Promise.all([
+    getModels(),
+    getVendors(),
+    getUseCases(),
+  ])
 
-  // Count models by type
   const modelsByType = models.reduce(
     (acc, m) => {
       acc[m.type] = (acc[m.type] || 0) + 1
@@ -15,7 +19,6 @@ export default async function RegistryPage() {
     {} as Record<string, number>
   )
 
-  // Count models by status
   const modelsByStatus = models.reduce(
     (acc, m) => {
       acc[m.status] = (acc[m.status] || 0) + 1
@@ -29,12 +32,12 @@ export default async function RegistryPage() {
       <div>
         <h1 className="text-2xl font-semibold text-slate-100">Model & Vendor Registry</h1>
         <p className="text-sm text-slate-400 mt-1">
-          Overview of all registered AI models and vendors.
+          Overview of all registered AI models, vendors, and use cases.
         </p>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6">
           <h3 className="text-sm font-medium text-slate-400">Total Models</h3>
           <p className="text-3xl font-bold text-slate-100 mt-2">{models.length}</p>
@@ -81,10 +84,22 @@ export default async function RegistryPage() {
             </div>
           </div>
         </div>
+
+        <div className="rounded-lg border border-slate-700 bg-slate-800/30 p-6">
+          <h3 className="text-sm font-medium text-slate-400">Use Cases</h3>
+          <p className="text-3xl font-bold text-slate-100 mt-2">{useCases.length}</p>
+          <div className="mt-3 space-y-1 text-xs text-slate-500">
+            <p>
+              {useCases.length === 0
+                ? 'No use cases defined'
+                : `${useCases.length} regulatory categor${useCases.length === 1 ? 'y' : 'ies'}`}
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Quick links */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Link href="/models">
           <Button variant="outline">View All Models</Button>
         </Link>
@@ -95,7 +110,13 @@ export default async function RegistryPage() {
           <Button variant="outline">View All Vendors</Button>
         </Link>
         <Link href="/registry/vendors/new">
-          <Button>Register Vendor</Button>
+          <Button variant="outline">Register Vendor</Button>
+        </Link>
+        <Link href="/registry/use-cases">
+          <Button variant="outline">View All Use Cases</Button>
+        </Link>
+        <Link href="/registry/use-cases/new">
+          <Button variant="outline">New Use Case</Button>
         </Link>
       </div>
     </div>
