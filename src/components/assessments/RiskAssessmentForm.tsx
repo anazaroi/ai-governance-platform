@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { calculateTier, createRiskAssessment, RiskScores } from '@/lib/actions/assessment.actions'
+import { createRiskAssessment } from '@/lib/actions/assessment.actions'
+import { calculateTier, type RiskScores } from '@/lib/utils'
 import { RiskTierBadge } from '@/components/models/RiskTierBadge'
 
 const DIMENSIONS = [

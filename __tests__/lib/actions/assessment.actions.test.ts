@@ -22,7 +22,8 @@ jest.mock('next/cache', () => ({
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
-import { calculateTier, createRiskAssessment } from '@/lib/actions/assessment.actions'
+import { createRiskAssessment } from '@/lib/actions/assessment.actions'
+import { calculateTier } from '@/lib/utils'
 
 const mockAuth = auth as unknown as jest.Mock
 const mockCreate = db.riskAssessment.create as jest.Mock

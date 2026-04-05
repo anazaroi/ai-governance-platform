@@ -6,28 +6,7 @@ import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { REVIEW_INTERVAL_MONTHS } from '@/lib/constants'
 import { Prisma } from '@prisma/client'
-
-// ── Tier calculation ──────────────────────────────────────────────────────────
-
-export type RiskScores = {
-  dataSensitivity: 1 | 2 | 3
-  customerImpact: 1 | 2 | 3
-  modelComplexity: 1 | 2 | 3
-  explainability: 1 | 2 | 3
-  operationalCriticality: 1 | 2 | 3
-}
-
-export function calculateTier(scores: RiskScores): 'HIGH' | 'MEDIUM' | 'LOW' {
-  const total =
-    scores.dataSensitivity +
-    scores.customerImpact +
-    scores.modelComplexity +
-    scores.explainability +
-    scores.operationalCriticality
-  if (total >= 12) return 'HIGH'
-  if (total >= 9) return 'MEDIUM'
-  return 'LOW'
-}
+import { calculateTier, type RiskScores } from '@/lib/utils'
 
 // ── createRiskAssessment ──────────────────────────────────────────────────────
 
