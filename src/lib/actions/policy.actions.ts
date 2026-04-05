@@ -132,6 +132,7 @@ export async function deleteControl(id: string) {
     if (!control) return { error: 'Control not found' as const }
     await db.control.delete({ where: { id } })
     revalidatePath(`/policies/${control.policyId}`)
+    revalidatePath('/policies')
     return { data: { id } }
   } catch {
     return { error: 'Failed to delete control' as const }

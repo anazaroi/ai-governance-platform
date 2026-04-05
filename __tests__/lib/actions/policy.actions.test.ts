@@ -196,6 +196,7 @@ describe('deleteControl', () => {
 
     expect(mockControlDelete).toHaveBeenCalledWith({ where: { id: 'c1' } })
     expect(revalidatePath).toHaveBeenCalledWith('/policies/p1')
+    expect(revalidatePath).toHaveBeenCalledWith('/policies')
     expect(result).toEqual({ data: { id: 'c1' } })
   })
 

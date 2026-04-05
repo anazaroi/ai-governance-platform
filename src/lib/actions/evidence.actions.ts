@@ -1,8 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+
+const submitEvidenceSchema = z.object({
+  modelId: z.string().min(1, 'Model ID is required'),
+  controlId: z.string().min(1, 'Control ID is required'),
+  fileUrl: z.string().url('Invalid URL').optional(),
+})
 
 export async function submitEvidence(formData: {
   modelId: string
@@ -12,7 +19,9 @@ export async function submitEvidence(formData: {
   const { userId } = await auth()
   if (!userId) return { error: 'Unauthorized' as const }
 
-  const { modelId, controlId, fileUrl } = formData
+  const parsed = submitEvidenceSchema.safeParse(formData)
+  if (!parsed.success) return { error: parsed.error.issues[0].message }
+  const { modelId, controlId, fileUrl } = parsed.data
 
   try {
     const existing = await db.controlEvidence.findFirst({
