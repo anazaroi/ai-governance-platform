@@ -29,16 +29,6 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-function setupDefaults() {
-  mockGroupBy
-    .mockResolvedValueOnce([]) // byStatus
-    .mockResolvedValueOnce([]) // byTier
-  mockWorkflowCount.mockResolvedValueOnce(0)
-  mockAssessmentCount.mockResolvedValueOnce(0)
-  mockAssessmentFindMany.mockResolvedValueOnce([])
-  mockWorkflowFindMany.mockResolvedValueOnce([])
-}
-
 describe('getDashboardStats', () => {
   it('aggregates model counts by status', async () => {
     mockGroupBy
@@ -108,7 +98,7 @@ describe('getDashboardStats', () => {
     expect(stats.overdueReviewCount).toBe(4)
     expect(db.riskAssessment.count).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({ nextReviewDate: { lte: expect.any(Date) } }),
+        where: expect.objectContaining({ nextReviewDate: { not: null, lte: expect.any(Date) } }),
       })
     )
   })

@@ -1,4 +1,5 @@
 import { db } from '@/lib/db'
+import { RiskTier, WorkflowType, WorkflowStatus } from '@prisma/client'
 
 export type DashboardStats = {
   totalModels: number
@@ -8,14 +9,14 @@ export type DashboardStats = {
   overdueReviewCount: number
   recentAssessments: {
     id: string
-    tier: string
+    tier: RiskTier
     assessedAt: Date
     model: { id: string; name: string }
   }[]
   recentWorkflows: {
     id: string
-    type: string
-    status: string
+    type: WorkflowType
+    status: WorkflowStatus
     createdAt: Date
     model: { id: string; name: string }
   }[]
@@ -36,7 +37,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       where: { status: { in: ['PENDING', 'IN_REVIEW'] } },
     }),
     db.riskAssessment.count({
-      where: { nextReviewDate: { lte: new Date() } },
+      where: { nextReviewDate: { not: null, lte: new Date() } },
     }),
     db.riskAssessment.findMany({
       take: 5,
