@@ -33,6 +33,9 @@ export default async function ModelDetailPage({ params }: ModelDetailPageProps) 
           )}
         </div>
         <div className="flex gap-2">
+          <Link href={`/models/${model.id}/compliance`}>
+            <Button variant="outline" size="sm">Compliance</Button>
+          </Link>
           <Link href={`/models/${model.id}/workflows/new`}>
             <Button variant="outline" size="sm">Initiate Workflow</Button>
           </Link>
